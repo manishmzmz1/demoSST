@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="images/favicon.ico" type="image/ico" />
+
+    <title>Web App</title>
+
+
+</head>
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+
+<body>
+<div style="float:right;">
+    <button name="button">
+        <a th:href="@{~/user}">Dashboard</a>
+    </button>
+    <button name="button">
+        <a th:href="@{~/admin/faculty}">View Faculty List</a>
+    </button>
+    <button name="button">
+        <a th:href="@{~/logout}">Logout</a>
+    </button>
+</div>
+
+<h2>Faculty Create Form</h2>
+
+<div th:if="${success!=null}" style="color:red;">
+    <strong th:text="${success}"></strong>
+</div>
+
+<form th:action="@{/admin/faculty/create}" th:object="${faculty}" method="post">
+    <label for="name">Faculty name:</label><br>
+    <input type="text" id="name" name="name" required="required" />
+    <input type="submit" value="Submit">
+</form>
+
+<br>
+<br>
+
+<h2>Faculty List</h2>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Action</th>
+    </tr>
+    <tr th:each="v: ${faculties}">
+        <td th:text="${v.id}"></td>
+        <td th:text="${v.name}"></td>
+        <td style="width: 15%;"><a sec:authorize="hasAnyRole('ADMINA','CREATERA')"
+                                                  th:href="@{'/admin/faculty/update/'+ ${v.id}}">Update</a>
+    </tr>
+</table>
+
+</body>
+</html>
